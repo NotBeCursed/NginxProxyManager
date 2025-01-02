@@ -105,7 +105,7 @@ If you prefer to add SSL certificates manually, place them in the `/etc/letsencr
 - **Nginx Proxy Manager not working**: Check the logs for the application with `docker-compose logs app` to identify any issues with the database connection or application startup.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 - **Nginx Proxy Manager** is open-source and licensed under the **MIT License**.
 - **MariaDB** is licensed under the **GPLv2**.
 
