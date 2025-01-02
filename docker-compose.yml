@@ -1,0 +1,54 @@
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    container_name: nginx_app
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    environment:
+      DB_MYSQL_HOST: ${DB_MYSQL_HOST}
+      DB_MYSQL_PORT: ${DB_MYSQL_PORT}
+      DB_MYSQL_USER: ${DB_MYSQL_USER}
+      DB_MYSQL_PASSWORD: ${DB_MYSQL_PASSWORD}
+      DB_MYSQL_NAME: ${DB_MYSQL_NAME}
+      DISABLE_IPV6: 'true'
+    volumes:
+      - npm_app:/data
+      - npm_app:/etc/letsencrypt
+    depends_on:
+      - db
+    networks:
+      npm_network:
+        aliases:
+          - proxy
+
+  db:
+    image: 'jc21/mariadb-aria:latest'
+    restart: unless-stopped
+    container_name: nginx_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_AUTO_UPGRADE: '1'
+    volumes:
+      - npm_db:/var/lib/mysql
+    networks:
+      npm_network:
+        aliases:
+          - db
+  
+networks:
+  npm_network:
+    driver: bridge
+    name: npm_network
+
+
+volumes:
+  npm_app:
+   name: nginx_proxy_manager_app
+  npm_db:
+   name: nginx_proxy_manager_db
